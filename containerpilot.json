@@ -4,7 +4,7 @@
     {
       "name": "rabbitmq",
       "port": "{{.PORT}}",
-      "health": "/usr/bin/curl -o /dev/null --fail -s http://localhost:{{.PORT}}",
+      "health": "/usr/bin/curl -o /dev/null -s http://localhost:{{.PORT}}",
       "poll": 3,
       "ttl": 10
     }
