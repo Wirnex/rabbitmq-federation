@@ -27,4 +27,4 @@ ENV CONTAINERPILOT=file://${CONTAINERPILOT_PATH}
 
 EXPOSE 4369 5671 5672 15672
 ENTRYPOINT ["/bin/containerpilot"]
-CMD ["rabbitmq-server"]
+CMD ["rabbitmq-server", "-setcookie HEQCYQHCGHTWSZXNQVJY"]
