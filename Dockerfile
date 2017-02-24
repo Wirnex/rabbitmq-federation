@@ -5,7 +5,7 @@ RUN apt-get update \
     && apt-get install -y curl \
     && apt-get clean
 
-COPY .erlang.cookie ${ERLANGCOOKIE_PATH}
+COPY .erlang.cookie /var/lib/rabbitmq/.erlang.cookie
 
 RUN rabbitmq-plugins enable --offline \
     rabbitmq_management \
