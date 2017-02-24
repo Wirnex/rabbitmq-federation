@@ -5,6 +5,7 @@ RUN apt-get update \
     && apt-get install -y curl \
     && apt-get clean
 
+COPY .erlang.cookie ${ERLANGCOOKIE_PATH}
 
 RUN rabbitmq-plugins enable --offline \
     rabbitmq_management \
@@ -27,4 +28,4 @@ ENV CONTAINERPILOT=file://${CONTAINERPILOT_PATH}
 
 EXPOSE 4369 5671 5672 15672
 ENTRYPOINT ["/bin/containerpilot"]
-CMD ["rabbitmq-server", "-setcookie HEQCYQHCGHTWSZXNQVJY"]
+CMD ["rabbitmq-server", "-setcookie ZYOFWRJMLVVIYTEFEMPP"]
