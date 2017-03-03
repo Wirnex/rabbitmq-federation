@@ -2,15 +2,26 @@ FROM rabbitmq:3
 # MAINTAINER Gregory Daynes <gregdaynes@gmail.com>
 
 RUN apt-get update \
-    && apt-get install -y curl \
+    && apt-get install -y curl unzip tar dnsutils \
     && apt-get clean
 
-COPY .erlang.cookie /var/lib/rabbitmq/.erlang.cookie
+ADD .erlang.cookie /var/lib/rabbitmq/.erlang.cookie
+RUN chown rabbitmq:rabbitmq /var/lib/rabbitmq/.erlang.cookie
+RUN chmod 400 /var/lib/rabbitmq/.erlang.cookie
 
 RUN rabbitmq-plugins enable --offline \
     rabbitmq_management \
     rabbitmq_federation \
     rabbitmq_federation_management
+
+# Install consul
+RUN export CONSUL_VERSION=0.7.2 \
+    && export CONSUL_CHECKSUM=aa97f4e5a552d986b2a36d48fdc3a4a909463e7de5f726f3c5a89b8a1be74a58 \
+    && curl --retry 7 --fail -vo /tmp/consul.zip "https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip" \
+    && echo "${CONSUL_CHECKSUM}  /tmp/consul.zip" | sha256sum -c \
+    && unzip /tmp/consul -d /usr/local/bin \
+    && rm /tmp/consul.zip \
+    && mkdir /config
 
 # Install ContainerPilot
 ENV CONTAINERPILOT_VERSION 2.6.0
@@ -28,4 +39,4 @@ ENV CONTAINERPILOT=file://${CONTAINERPILOT_PATH}
 
 EXPOSE 4369 5671 5672 15672
 ENTRYPOINT ["/bin/containerpilot"]
-CMD ["rabbitmq-server", "-setcookie ZYOFWRJMLVVIYTEFEMPP"]
+CMD ["rabbitmq-server"]
